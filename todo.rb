@@ -16,7 +16,29 @@ class MainWindow < Qt::MainWindow
 
     @ui = Ui::MainWindow.new
     @ui.setup_ui ( self )
+
+    setup_actions
   end
+
+  def setup_actions
+    # Using connect, we connect a "signal" to a "slot"
+    # signal is Qt's way to say something happened
+    # and slot is just a method to call when that
+    # something happens
+    @ui.btn_add.connect( :clicked, self, :add_task )
+    @ui.btn_done.connect( :clicked, self, :task_done )
+  end
+
+  def add_task
+    @ui.tasks_list.add_item @ui.task_name.text
+    @ui.task_name.text = ''
+  end
+
+  def task_done
+    idx = @ui.tasks_list.current_row
+    @ui.tasks_list.take_item idx
+  end
+
 end
 
 ##############################
